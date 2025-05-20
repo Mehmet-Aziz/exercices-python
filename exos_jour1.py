@@ -16,3 +16,6 @@ phrase= "voici une phrase"
 
 phrase=phrase.upper()
 print(phrase)
+
+
+print("on teste si le token bien enregistrer sur git/github")
