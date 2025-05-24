@@ -5,3 +5,7 @@ ensuite on a pris note et fais quelque exos de python sur les lecons debutant de
 bien que on soit le jour 4 , je vais cree un jour 5 pour dissocier avec le jour 4 et bien commencer les exos de france IOI
 
 bien maintenant passons au jour 5
+
+
+j'ai fais les 6 premiers exos du niveau 1 partie 1 
+je suis maintenant au 1-2
