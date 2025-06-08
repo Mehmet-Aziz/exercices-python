@@ -44,12 +44,10 @@ consigne faites par chatgpt , pas vraiment de libre arbitre pour m'entrainer
     Tant que l’utilisateur ne choisit pas 0, le menu revient.
 */
 
-void menu(int &zero)
+void menu()
 {
     cout<<"Bienvenue dans le Menu Calculatrice"<<endl<<"Voici les differents types d'oppeérations possible"<<endl;
     cout<<"1. Addition - 2.Soustraction - 3.Multiplication - 4.Division - 5.Quitter"<<endl;
-    cout<<"Tappez sur 0 pour continuer";
-    cin>>zero;
 }
 
 void opperations(float &a ,int &choix, float &b)
@@ -94,32 +92,29 @@ float division(float a , float b)
 
 int main()
 {
-    int zero,choix;
+    int choix;
     float a,b;
     do
     {
-        menu(zero);
-    }
-    while (zero!=0);
-    opperations(a,choix,b);
-    do
-    {
-    switch(choix)
+        menu();
+    
+        opperations(a,choix,b);
+        switch(choix)
     {
         case 1 :
-        addition(a,b);
+        cout<<addition(a,b);
         break;
 
         case 2 :
-        soustraction(a,b);
+        cout<<soustraction(a,b);
         break;
 
         case 3 :
-        multiplication(a,b);
+        cout<<multiplication(a,b);
         break;
 
         case 4 :
-        division(a,b);
+        cout<<division(a,b);
         break;
 
         case 5 :
