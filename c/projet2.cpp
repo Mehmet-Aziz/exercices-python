@@ -28,45 +28,59 @@ char nom[50];
 vector<float> notes;
 };
 
+
+void affichage(eleve &e)
+{
+cout<<"voici le nom :"<<e.nom<<endl;
+cout<<"voici les notes :";
+for(int i=0;i<e.notes.size();i+=1)
+{
+    cout<<e.notes[i]<<" ";
+}
+cout<<endl<<"voici la moyenne :";
+float moy=0.0;
+for(int i=0;i<e.notes.size();i+=1)
+{
+moy+=e.notes[i];
+}
+moy=moy/e.notes.size();
+cout<<moy<<endl;
+}
+
+
 int main()
 {
+    vector<eleve> classe;
+    int continuer1=1;
+
     do
     {
-        bool vrai=false;
-        vector<eleve> e;
-        cout<<"quelle est le nom de l'eleve ?"<<endl;
-        cin>>e.nom;
+        eleve temp;
+        cout<<"Quel est son nom ?"<<endl;
+        cin>>temp.nom;
+        int continuer2=0;
         do
         {
-            bool fini=false;
-            int i=0;
+            float note;
             cout<<"quelle est sa note ?"<<endl;
-            cin>>e.notes[i];
-            i+=1;
-            cout<<"si c'est finis tape 0, sinon tape 1"<<endl;
-            cin>>fini;
+            cin>>note;
+            temp.notes.push_back(note);
+            cout<<"c'est finis ? tape 0 pour non sinon tape 1"<<endl;
+            cin>>continuer2;
+        } while (continuer2==0);
 
-        }
-        while(finis!=false);
+        classe.push_back(temp);
 
-        cout<<endl<<"description de l'eleve"<<endl;
-        cout<<"Prenom :"<<e.nom<<endl;
-        cout<<"notes :"<<endl:
-        for(int i=0;i<e.notes.size(),i+=1)
-        {
-            cout<<e.notes[i]<<endl;
-        }
-        cout<<"Moyenne :"<<endl;
-        float moy=0;
-        for(int i=0;i<e.notes.size();i+=1)
-        {
-        moy+=e.notes[i];
-        }
-        moy=moy/e.notes.size();
-        cout<<moy;
-        cout<<endl<<"on continue sur un nouvelle eleve ?, 1 pour oui , sinon 0"<<endl;
-        cin>>vrai;
-    } while (vrai==0);
+        cout<<endl<<"on ajoute nouvel eleve ? 0 pour non , 1 pour oui"<<endl;
+        cin>>continuer1;
+        
+    } while (continuer1==1);
     
+    cout<<"voici la liste de tout les eleves :"<<endl;
+    for(int i=0;i<classe.size();i+=1)
+    {
+        affichage(classe[i]);
+    }
+
     return 0;
 }
