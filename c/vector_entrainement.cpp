@@ -50,10 +50,38 @@ void affiche(vector <entier> e)
     }
 }
 
+
+/*
+🧩 Objectif niveau 2
+
+    Ajouter une fonction qui cherche un entier donné par l'utilisateur et affiche s'il est présent ou non.
+*/
+
+void recherche(vector<entier> e)
+{
+    int nombre;
+    bool fin=false;
+    do
+    {
+        cout<<"met un nombre ?"<<endl;
+        cin>>nombre;
+        for(auto &t : e)
+        {
+            if(t.entier==nombre)
+            {
+                cout<<"nombre trouver à l'indice "<<t.entier<<endl;
+            }
+        }
+        cout<<"tu as finis ?"<<endl;
+        cin>>fin;
+    }while(fin==false);
+}
+
 int main()
 {
     vector<entier> e;
     ajout(e);
     affiche(e);
+    recherche(e);
     return 0;
 }
