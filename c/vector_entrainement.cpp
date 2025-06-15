@@ -123,7 +123,7 @@ void trie (vector<entier> &e)
     int temp;
     if(choix==1)
     {
-        for(j=0;j<e.size();j+=1)
+        for(int j=0;j<e.size();j+=1)
         {
             for(int i=0;i<e.size()-1;i+=1)
             {
@@ -143,7 +143,7 @@ void trie (vector<entier> &e)
     }
     if(choix==2)
     {
-        for(j=0;j<e.size();j+=1)
+        for(int j=0;j<e.size();j+=1)
         {
             for(int i=0;i<e.size()-1;i+=1)
             {
@@ -195,6 +195,56 @@ void trier(vector<entier> &e)
 
 */
 
+/*
+Exercice
+
+    Permettre à l’utilisateur de modifier un élément du vector :
+
+        soit par son indice
+
+        soit par sa valeur (on modifie la première occurrence trouvée)
+
+    Exemple : remplacer le nombre 7 par 42, ou à l’indice 3, mettre 99.
+*/
+
+void changement (vector<entier> &e)
+{
+    int choix;
+    int i;
+    bool trouve=false;
+    int nombre;
+    int nmbr;
+    cout<<"tu veux changer une valeur par son indice ? 1) , ou bien par la premiere occurence ? 2)"<<endl;
+    cin>>choix;
+    if(choix==1)
+    {
+        cout<<"saisis l'indice"<<endl;
+        cin>>i;
+        cout<<"met nouvelle valeur"<<endl;
+        cin>>nmbr;
+        e[i].entier=nmbr;
+    }
+    else if (choix==2)
+    {
+        cout<<"met val a changer"<<endl;
+        cin>>nombre;
+        cout<<"met nouvelle valeur"<<endl;
+        cin>>nmbr;
+        for(int j=0;j<e.size();j++)
+        {
+           do
+           {
+            if(e[j].entier==nombre)
+            {
+                e[j].entier=nmbr;
+                trouve=true;
+            }
+           } while (trouve==false);
+           
+        }
+    }
+}
+
 int main()
 {
     vector<entier> e;
@@ -204,5 +254,7 @@ int main()
     supprime(e);
     affiche(e);
     trie(e);
+    changement(e);
+    affiche(e);
     return 0;
 }
