@@ -1,103 +1,104 @@
 #include <iostream>
 #include <vector>
-#include <string.h>
+#include <string>
 
 using namespace std;
-
-/*
-    🧩 Objectif général
-
-Créer une To-Do List en C++ qui permet de gérer des tâches avec :
-
-    Une description
-
-    Une priorité (1 à 5)
-
-    Une date
-
-    Un état ("à faire" ou "terminée")
-*/
 
 struct tache
 {
     string nom;
     string description;
     int priorite;
-    bool etat;
-    char date[10];
+    bool etat;           // false = à faire, true = terminée
+    string date;         // on passe à string pour simplifier l'entrée JJ/MM/AAAA
 };
 
-void remplir (tache &t)
+// ✅ Corrigé : meilleure saisie des données
+void remplir(tache &t)
 {
-    cout<<"quelle est son nom ?"<<endl;
-    cin>>t.nom;
-    cout<<"quelle est sa description ?"<<endl;
-    cin>>t.description;
-    cout<<"quelle est son ordre de priorite ?"<<endl;
-    cin>>t.priorite;
-    cout<<"quelle est son etat ?"<<endl;
-    cin>>t.etat;
-    cout<<"quelle est sa date limite  ?"<<endl;
-    for(int i=0;i<10;i++)
+    cout << "Nom de la tâche : ";
+    cin.ignore();
+    getline(cin, t.nom); // On accepte les espaces
+
+    cout << "Description : ";
+    getline(cin, t.description);
+
+    cout << "Priorité (1-5) : ";
+    cin >> t.priorite;
+
+    cout << "État (0 = à faire, 1 = terminée) : ";
+    cin >> t.etat;
+
+    cout << "Date limite (JJ/MM/AAAA) : ";
+    cin.ignore();
+    getline(cin, t.date); // plus simple à lire
+}
+
+// ✅ Corrigé : reçoit une tâche et l'affiche clairement
+void affiche(const tache &t)
+{
+    cout << "\n--- Tâche ---" << endl;
+    cout << "Nom         : " << t.nom << endl;
+    cout << "Description : " << t.description << endl;
+    cout << "Priorité    : " << t.priorite << endl;
+    cout << "État        : " << (t.etat ? "Terminée" : "À faire") << endl;
+    cout << "Date        : " << t.date << endl;
+}
+
+// ✅ Corrigé : passe le vecteur en paramètre + bon choix
+void terminer(vector<tache> &taches)
+{
+    int choix;
+    cout << "1. Par indice\n2. Par nom\nChoix : ";
+    cin >> choix;
+
+    if (choix == 1)
     {
-        if((i==2)||(i==5))
+        int index;
+        cout << "Indice de la tâche : ";
+        cin >> index;
+
+        if (index >= 0 && index < taches.size())
         {
-            t.date[i]= /;
+            taches[index].etat = true;
+            cout << "✅ Tâche marquée comme terminée !" << endl;
         }
         else
         {
-            cin>>t.date[i];
+            cout << "❌ Indice invalide." << endl;
         }
     }
-}
-
-void affiche(vector<tache> t)
-{
-    cout<<"NOM :"<<endl<<t.nom<<endl;
-    cout<<"DESCRIPTION :"<<endl<<t.description<<endl;
-    cout<<"PRIORITE :"<<endl<<t.priorite<<endl;
-    cout<<"ETAT :"<<endl<<t.etat<<endl;
-    cout<<"DATE :"<<endl<<t.date<<endl;
-}
-
-tache terminer()
-{
-    int choix;
-    int index;
-    string titre;
-
-
-    cout<<"cherchez vous l'indice ou le nom ?"<<endl<<"pour l'indice taper 1 , pour le nom taper 2"<<;
-    cin>>choix;
-    if(choix==1)
+    else if (choix == 2)
     {
-        cout<<"tu as chercher l'indice du tableau, tape son indice ";
-        cin>>index;
-        if(index>=0 && index<t.size())
-        {
-        t[index].etat=true;
-        }
-    }
-    bool trouve=false;
-    if(choix==2)
-    {
-        cout<<"tu as choisis le nom "<<endl<<"tape le titre ";
-        cin>>titre;
+        string titre;
         cin.ignore();
-        for (auto &ta : t)
+        cout << "Nom exact de la tâche : ";
+        getline(cin, titre);
+
+        bool trouve = false;
+        for (auto &t : taches)
         {
-            if (ta.description == titre)
+            if (t.nom == titre)
             {
-                ta.etat = true;
-                cout << "Tâche marquée comme terminée ✅" << endl;
+                t.etat = true;
+                cout << "✅ Tâche marquée comme terminée !" << endl;
                 trouve = true;
                 break;
             }
         }
+
+        if (!trouve)
+        {
+            cout << "❌ Tâche non trouvée." << endl;
+        }
+    }
+    else
+    {
+        cout << "❌ Choix invalide." << endl;
     }
 }
 
-//fait avec chatgpt car trop debutant pour les vectors
+// ✅ Corrigé : suppression sécurisée par index
 void supprimer_tache(vector<tache> &liste, int index)
 {
     if (index < 0 || index >= liste.size())
@@ -110,51 +111,80 @@ void supprimer_tache(vector<tache> &liste, int index)
     cout << "✅ Tâche supprimée avec succès !" << endl;
 }
 
-filtrer_a_faire(vector<tache> &t)
+// ✅ Corrigé : bon format + filtre clair
+void filtrer_a_faire(const vector<tache> &taches)
 {
-    for (auto &ta :t)
+    cout << "\n📋 Tâches à faire :" << endl;
+    for (const auto &t : taches)
     {
-        if ta.etat==false;
-        cout<<ta.nom<<" a faire "<<endl;
+        if (!t.etat)
+        {
+            cout << "- " << t.nom << " (priorité " << t.priorite << ")" << endl;
+        }
     }
 }
 
 int main()
 {
-    cout<<"bienvenu dans le programme to do list"<<endl<<"vous pouvez "<<endl;
-    cout<<"1. Crée une tache , 2. Afficher une tache , 3. Terminer une tache , 4. Montrer ceux qui reste , 5. QUITTER"<<endl;
+    vector<tache> liste;
     int choix;
-    vector <tache> t;
-    tache temp;
-    bool fin=false;
+    bool fin = false;
+
+    cout << "=== Gestionnaire de Tâches ===\n";
+
     do
     {
-        cout<<"Veuillez choisir"<<endl;
-        cin>>choix;
-        switch(choix)
+        cout << "\nMenu :\n";
+        cout << "1. Ajouter une tâche\n";
+        cout << "2. Afficher toutes les tâches\n";
+        cout << "3. Marquer une tâche comme terminée\n";
+        cout << "4. Supprimer une tâche\n";
+        cout << "5. Afficher tâches à faire\n";
+        cout << "6. Quitter\n";
+        cout << "Votre choix : ";
+        cin >> choix;
+
+        switch (choix)
         {
-            case 1 :
+        case 1:
+        {
+            tache temp;
             remplir(temp);
-            t.push_back(temp);
-            break;
-
-             case 2 :
-            affiche(temp);
-            break;
-
-             case 3 :
-            terminer(temp);
-            break;
-
-            case 4 :
-            filtrer_a_faire(t);
-            break;
-
-            case 5 :
-            fin=true;
+            liste.push_back(temp);
             break;
         }
-    } while (fin==false);
+        case 2:
+            for (const auto &t : liste)
+                affiche(t);
+            break;
 
+        case 3:
+            terminer(liste);
+            break;
+
+        case 4:
+        {
+            int index;
+            cout << "Indice de la tâche à supprimer : ";
+            cin >> index;
+            supprimer_tache(liste, index);
+            break;
+        }
+
+        case 5:
+            filtrer_a_faire(liste);
+            break;
+
+        case 6:
+            fin = true;
+            break;
+
+        default:
+            cout << "❌ Choix invalide." << endl;
+        }
+
+    } while (!fin);
+
+    cout << "👋 Merci d’avoir utilisé la To-Do List." << endl;
     return 0;
 }
