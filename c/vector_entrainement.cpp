@@ -69,7 +69,7 @@ void recherche(vector<entier> e)
         {
             if(e[i].entier==nombre)         //Modification pour faire apparaitre l'indice
             {
-                cout<<"nombre trouver à l'indice "<<e[i].entier<<endl;
+                cout<<"nombre trouver à l'indice "<<i<<endl;
             }
         }
         cout<<"tu as finis ?"<<endl;
