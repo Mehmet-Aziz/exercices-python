@@ -245,16 +245,61 @@ void changement (vector<entier> &e)
     }
 }
 
+/*
+Niveau 6 = tout regrouper dans un menu “pro”, pour faire comme une mini-app.
+*/
+
+void menu (vector <entier> &e)
+{
+    bool fin=false;
+    int choix;
+    do
+    {
+        cout<<"Bienvenue sur le menu !"<<endl;
+        cout<<"0. Quitter ,1. Ajout d'un nombre , 2.Affiche des nombres , 3. recherche d'indice , 4.supprime , 5.trie "<<endl;
+        cin>>choix;
+
+        switch(choix)
+        {
+            case 0 :
+            fin=true;
+            break;
+
+            case 1 :
+            ajout(e);
+            affiche(e);
+            break;
+
+            case 2 :
+            affiche(e);
+            break;
+            
+            case 3 :
+            recherche(e);
+            affiche(e);
+            break;
+
+             case 4 :
+            supprime(e);
+            affiche(e);
+            break;
+
+             case 5 :
+            trie(e);
+            affiche(e);
+            break;
+
+            default :
+            cout<<"erreur bye !"<<endl;
+            fin=true;
+        }
+    } while (fin==false);
+    
+}
+
 int main()
 {
     vector<entier> e;
-    ajout(e);
-    affiche(e);
-    recherche(e);
-    supprime(e);
-    affiche(e);
-    trie(e);
-    changement(e);
-    affiche(e);
+    menu(e);
     return 0;
 }
