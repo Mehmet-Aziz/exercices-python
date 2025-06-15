@@ -107,6 +107,93 @@ void supprime(vector <entier> &e)
     
 }
 
+/*
+🧪 Niveau 4 : Trier un vector
+🧠 Objectif
+
+    Ajouter une fonction qui trie ton vector<entier> soit en ordre croissant,
+    soit en ordre décroissant (tu peux proposer le choix à l’utilisateur).
+*/
+
+void trie (vector<entier> &e)
+{
+    int choix;
+    cout<<"veux tu trier par 1.ordre croissant ou par ordre 2.decroissant ?"<<endl;
+    cin>>choix;
+    int temp;
+    if(choix==1)
+    {
+        for(j=0;j<e.size();j+=1)
+        {
+            for(int i=0;i<e.size()-1;i+=1)
+            {
+                if(e[i].entier>=e[i+1].entier)
+                {
+                temp=e[i].entier;
+                e[i].entier=e[i+1].entier;
+                e[i+1].entier=temp;
+                }
+            }
+        }    
+        for(int i=0;i<e.size();i+=1)
+        {
+            cout<<e[i].entier<<" ";
+        }
+    
+    }
+    if(choix==2)
+    {
+        for(j=0;j<e.size();j+=1)
+        {
+            for(int i=0;i<e.size()-1;i+=1)
+            {
+            
+                if(e[i].entier<=e[i+1].entier)
+                {
+                temp=e[i].entier;
+                e[i].entier=e[i+1].entier;
+                e[i+1].entier=temp;
+                }
+            }
+        }   
+        for(int i=0;i<e.size();i+=1)
+        {
+            cout<<e[i].entier<<" ";
+        }
+    }
+}
+
+/*
+avec chat gpt , alternative plus poussée 
+#include <algorithm> // à inclure absolument !
+
+void trier(vector<entier> &e)
+{
+    int choix;
+    cout << "Choisir le mode de tri : 1 pour croissant, 2 pour décroissant : ";
+    cin >> choix;
+
+    if (choix == 1)
+    {
+        sort(e.begin(), e.end(), [](const entier &a, const entier &b) {
+            return a.entier < b.entier;
+        });
+        cout << "✅ Trié par ordre croissant." << endl;
+    }
+    else if (choix == 2)
+    {
+        sort(e.begin(), e.end(), [](const entier &a, const entier &b) {
+            return a.entier > b.entier;
+        });
+        cout << "✅ Trié par ordre décroissant." << endl;
+    }
+    else
+    {
+        cout << "❌ Choix invalide." << endl;
+    }
+}
+
+*/
 
 int main()
 {
@@ -116,5 +203,6 @@ int main()
     recherche(e);
     supprime(e);
     affiche(e);
+    trie(e);
     return 0;
 }
