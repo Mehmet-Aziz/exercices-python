@@ -65,11 +65,11 @@ void recherche(vector<entier> e)
     {
         cout<<"met un nombre ?"<<endl;
         cin>>nombre;
-        for(auto &t : e)
+        for(int i=0;i<e.size();i+=1)
         {
-            if(t.entier==nombre)
+            if(e[i].entier==nombre)         //Modification pour faire apparaitre l'indice
             {
-                cout<<"nombre trouver à l'indice "<<t.entier<<endl;
+                cout<<"nombre trouver à l'indice "<<e[i].entier<<endl;
             }
         }
         cout<<"tu as finis ?"<<endl;
