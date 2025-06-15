@@ -77,11 +77,44 @@ void recherche(vector<entier> e)
     }while(fin==false);
 }
 
+/*
+🧪 Objectif niveau 3
+
+    Permettre à l’utilisateur de saisir un nombre, et supprimer toutes ses occurrences du vector.
+
+⚡ Explication
+
+    Pourquoi toutes ? Comme on l’a vu, un même nombre peut apparaître à plusieurs indices (ex : 5 aux indices 2, 4, 6).
+
+    Suppression sur vector : On utilise erase() pour enlever un élément à un indice précis.
+
+    ⚠️ Quand tu supprimes un élément, les indices décalent : il faut faire attention !
+*/
+
+
+void supprime(vector <entier> &e)
+{   
+    int choix;
+    cout<<"quel element a supp ?"<<endl;
+    cin>>choix;
+    for(int i=e.size()-1;i>=0;i-=1)
+    {
+        if(e[i].entier==choix)
+        {
+            e.erase(e.begin()+i);
+        }
+    }
+    
+}
+
+
 int main()
 {
     vector<entier> e;
     ajout(e);
     affiche(e);
     recherche(e);
+    supprime(e);
+    affiche(e);
     return 0;
 }
