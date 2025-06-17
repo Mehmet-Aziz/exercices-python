@@ -121,16 +121,107 @@ void supprimer(vector <depense> &d)
 
 void modifier(vector<depense> &d)
 {
+    bool fin=false;
+    string nom, des , cate , date , dep;
+    float prix;
+    do
+    {
     int choix;
     cout<<"qu'est ce que tu veux changer ?"<<endl;
-    cout<<"1.nom , 2.description , 3.prix , 4.categorie , 5.date"<<endl;
+    cout<<"0.rien ,1.nom , 2.description , 3.prix , 4.categorie , 5.date"<<endl;
     cin>>choix;
+    cout<<"met le nom de la depense a changer"<<endl;
+    cin>>dep;
     switch(choix)
     {
+        case 0:
+        fin=true;
+        break;
+
         case 1 :
-        getline(cin,temp.nom);
+        for(int i=0;i<d.size();i+=1)
+        {
+            if(dep==d[i].nom)
+            {
+                cout<<"met son nouveau nom"<<endl;
+                cin>>d[i].nom;
+                break;
+            }
+        }
+        break;
+
+
+        case 2 :
+        for(int i=0;i<d.size();i+=1)
+        {
+            if(dep==d[i].nom)
+            {
+                cout<<"met sa nouvelle des"<<endl;
+                cin>>d[i].description;
+                break;
+            }
+        }
+        break;
+
+
+        case 3 :
+        for(int i=0;i<d.size();i+=1)
+        {
+            if(dep==d[i].nom)
+            {
+                cout<<"met son nouveau prix"<<endl;
+                cin>>d[i].prix;
+                break;
+            }
+        }
+        break;
+
+        case 4:
+        for(int i=0;i<d.size();i+=1)
+        {
+            if(dep==d[i].nom)
+            {
+                cout<<"met sa nouvelle"<<endl;
+                cin>>d[i].categorie;
+                break;
+            }
+        }
+        break;
+
+        case 5 :
+        for(int i=0;i<d.size();i+=1)
+        {
+            if(dep==d[i].nom)
+            {
+                cout<<"met sa nouvelle date"<<endl;
+                cin>>d[i].date;
+                break;
+            }
+        }
+        break;
+
+        default :
+        cout<<"error"<<endl;
+        fin=true;
+        break;
+
+
     }
+    } while (fin==false);
 }
+
+void total(vector <depense> &d)
+{
+    int somme=0;
+    for(int i=0;i<d.size();i++)
+    {
+        somme+=d[i].prix;
+    }
+
+    cout<<endl<<"voici le total  "<<somme<<endl;
+}
+
+//pas pu faire par categorie donc pas de 6
 
 int main()
 {
@@ -138,6 +229,8 @@ int main()
     ajouter(d);
     affiche(d);
     supprimer(d);
+    modifier(d);
+    total(d);
 
     return 0;
 }
