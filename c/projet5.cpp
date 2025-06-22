@@ -2,6 +2,10 @@
 #include <vector>
 #include <string>
 
+#include <map>
+#include <algorithm>
+
+
 using namespace std;
 
 /*
@@ -219,18 +223,153 @@ void total(vector <depense> &d)
     }
 
     cout<<endl<<"voici le total  "<<somme<<endl;
+
+    //partie 2 , somme par categorie
+
+    map <string , float> totaux; //je crée un tableau associatif qui va de la categorie au total
+    for(const auto &dep : d) //pour chaque dep du tableau d
+    {
+        totaux[dep.categorie]+=dep.prix; //j'ajoute a chaque string un float 
+    }
+
+    cout<<endl<<"somme totale par categorie"<<endl;
+
+    for(const auto &cat : totaux)// j'affiche 
+    {
+        cout<<"categorie : "<<cat.first<<" totale depensée : "<<cat.second<<endl;
+    }
 }
 
-//pas pu faire par categorie donc pas de 6
+/*
+version debutant
+
+void total(vector <depense> &d)
+{
+    vector<string> categorie;
+    for(int i=0;i<d.size();i+=1)
+    {
+    bool deja=false;
+    for(int j=0;j<categories.size();j++)
+    {
+        if(d[i].categorie==categorie[j])
+        {
+        deja=true;
+        break;
+        }
+    }
+
+    if(!deja)
+    {
+    categorie.push_back(d[i].categorie);
+    }
+    }
+
+    for(int i=0;i<categorie.size();i+=1)
+    {
+    float somme =0;
+    for(j=0;j<d.size();j++)
+    {
+    if(d[j].categorie==categorie[i])
+    {
+    somme+=d[j].prix;
+    }
+    }
+
+    cout<<"categorie : "<<categorie[i]<<" total : "<<somme<<endl;
+
+    }
+
+
+}
+
+*/
+
+void afficher_categorie(vector <depense> &d)
+{
+    string cat;
+    cout<<"quelle categorie tu veux afficher ?"<<endl;
+    getline(cin,cat);
+    cout<<endl<<"depense de la categorie "<<cat<<" : "<<endl;
+    for(auto &dep : d)
+    {
+        if(dep.categorie==cat)
+        {
+            cout<<dep.nom<<endl<<dep.description<<endl<<dep.categorie<<endl<<dep.prix<<endl<<dep.date<<endl;
+        }
+    }
+}
+
+void trier(vector <depense> &d)
+{
+    sort(d.begin(),d.end(),[](depense &a , depense &b)
+    {
+        return a.prix<b.prix;
+    });
+}
+
+void menu (vector <depense> &d)
+{
+    bool fin=false;
+    int choix;
+    cout<<endl<<endl<<"bienvenu sur menu"<<endl;
+    do
+    {
+        cout<<"0. pour quitter , 1.ajouter , 2.afficher , 3.supprimer , 4.modifier , 5.total , 6.afficher_categorie , 7.trier"<<endl;
+        cin>>choix;
+        switch (choix)
+        {
+        case 0:
+        fin=true;
+        break;
+        
+        case 1 :
+        {
+        bool fin1=false;
+        do
+        {
+        cout<<"ajouter une depense"<<endl;
+        ajouter(d);
+        cout<<endl<<endl<<"contunier ?"<<endl;
+        cin>>fin1;
+        cin.ignore();
+        } while (fin1==false);
+        break;
+        }
+        case 2 :
+        affiche(d);
+        break;
+
+        case 3 :
+        supprimer(d);
+        break;
+
+        case 4:
+        modifier(d);
+        break;
+
+        case 5 :
+        total(d);
+        break;
+
+        case 6 :
+        afficher_categorie(d);
+        break;
+
+        case 7 :
+        trier(d);
+        break;
+
+        default:
+        fin=true;
+        break;
+        }
+    } while (fin==false);
+    
+}
 
 int main()
 {
     vector <depense> d;
-    ajouter(d);
-    affiche(d);
-    supprimer(d);
-    modifier(d);
-    total(d);
-
+    menu(d);
     return 0;
 }
