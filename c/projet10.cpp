@@ -74,4 +74,25 @@ int main()
 
     return 0;
 }
+*
+
+/*
+int main()
+{
+    RenderWindow window(VideoMode(800,800),"fenetre");
+
+    while(window.isOpen())
+    {
+        Event event;
+
+        while(window.pollEvent(event))
+        {
+            if(event.type==Event::Closed)
+            window.close();
+        }
+        window.clear();
+        window.display();
+    }
+    return 0;
+}
 */
