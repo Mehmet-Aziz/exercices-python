@@ -6,7 +6,7 @@
 
 using namespace sf; // Permet d'éviter de préfixer avec "sf::"
 
-int main()
+/* int main()
 {
 
 
@@ -32,4 +32,46 @@ int main()
 
     return 0;
 }
+    */
 
+/*
+    //on recopie pour assimiler
+int main()
+{
+    RenderWindow window(VideoMode(800,800),"projet10");
+
+    while(window.isOpen())
+    {
+        Event event;
+        while(window.pollEvent(event))
+        {
+            if(event.type==Event::Closed)
+            window.close();
+        }
+        window.clear();
+        window.display();
+    }
+
+    return 0;
+}    
+*/
+/*
+int main()
+{
+    RenderWindow window(VideoMode(800,800),"TITRE");
+
+    while(window.isOpen())
+    {
+        Event event;
+        while(window.pollEvent(event))
+        {
+            if(event.type==Event::Closed)
+            window.close();
+        }
+        window.clear();
+        window.display();
+    }
+
+    return 0;
+}
+*/
