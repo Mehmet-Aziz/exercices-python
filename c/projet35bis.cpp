@@ -24,6 +24,7 @@ Cercle ajoute()
     c.y=c.rayon + rand()% 800;
     c.vx=0.05;
     c.vy=0.075;
+    return c;
 }
 
 int main()
@@ -41,17 +42,17 @@ int main()
     Text affichage , tempss , perdu;
     affichage.setFont(font);
     affichage.setCharacterSize(20);
-    affichage.setColor(Color::Red);
+    affichage.setFillColor(Color::Red);
     affichage.setPosition(10 , 900);
 
     tempss.setFont(font);
     tempss.setCharacterSize(20);
-    tempss.setColor(Color::Red);
+    tempss.setFillColor(Color::Red);
     tempss.setPosition(890 , 10);
 
     perdu.setFont(font);
     perdu.setCharacterSize(20);
-    perdu.setColor(Color::Red);
+    perdu.setFillColor(Color::Red);
     perdu.setPosition(890 , 10);
 
     vector <Cercle> c;
@@ -81,7 +82,7 @@ int main()
                 int sourisX=event.mouseButton.x , sourisY=event.mouseButton.y;
                 for(int i=0;i<c.size();i++)
                 {
-                    float dist=sqrt(pow(sourisX-c[i].rayon,2)+pow(sourisY-c[i].rayon,2));
+                    float dist=sqrt(pow(sourisX-c[i].x,2)+pow(sourisY-c[i].y,2));
                     if(dist<c[i].rayon)
                     {
                         score+=1;
@@ -104,7 +105,54 @@ int main()
 
         window.clear();
         
+        if(fin==false)
+        {
+            for(int i=0;i<c.size();i+=1)
+            {
+                c[i].x+=c[i].vx;
+                c[i].y+=c[i].vy;
+
+                if(c[i].x-c[i].rayon<0 || c[i].x + c[i].rayon>1000)
+                {
+                    c[i].vx=-c[i].vx;
+                }
+                 if(c[i].y-c[i].rayon<0 || c[i].y + c[i].rayon>1000)
+                {
+                    c[i].vy=-c[i].vy;
+                }
+
+                CircleShape shape(c[i].rayon);
+                shape.setFillColor(Color::Blue);
+                shape.setPosition(c[i].x-c[i].rayon,c[i].y-c[i].rayon);
+                window.draw(shape);
+            }
+            affichage.setString("score : " + to_string(int(score)));
+            tempss.setString("temps : " + to_string(int(30-temps)));
+            window.draw(affichage);
+            window.draw(tempss);
+
+        }
+
+        if(fin==true)
+        {
+            perdu.setString("game over \nscore" + to_string(int(score)) + "  \nhighscore  " + to_string(int(highscore))  );
+            window.draw(perdu);
+
+            if(Keyboard::isKeyPressed(Keyboard::R))
+            {
+                score=0;
+                chrono.restart();
+                fin=false;
+                c.clear();
+                for(int i=0;i<5;i+=1)
+                {
+                    c.push_back(ajoute());
+                }
+            }
+        }
+
+        window.display();
 
     }
-
+    return 0;
 }
