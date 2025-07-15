@@ -40,8 +40,8 @@ using namespace sf;
 struct Cercle
 {
     int rayon;
-    int x;
-    int y;
+    float x;
+    float y;
     float vx;
     float vy;
 };
@@ -52,8 +52,8 @@ Cercle ajoute_cercle()
     c.rayon=30 + rand()% 70;
     c.x=c.rayon + rand()% 800;
     c.y=c.rayon + rand()% 800;
-    c.vx=0.5;
-    c.vy=0.5;
+    c.vx=0.30;
+    c.vy=0.20;
     return c;
 }
 
@@ -83,6 +83,7 @@ int main()
     textscore.setPosition(10,900);
     while(window.isOpen())
     {
+        window.clear();
         Event event;
 
         while(window.pollEvent(event))
@@ -97,16 +98,30 @@ int main()
                 float dist=sqrt(pow(sourisX-c.x,2)+pow(sourisY-c.y,2));
                 if(dist<c.rayon)
                 {
+                    //etape 3 : score ++
                     score+=1;
                     c=ajoute_cercle();
                 }
 
             }
         }
+
+        //etape 4 : mouvement et rebond
+
+        c.x+=c.vx;
+        c.y+=c.vy;
+        if(c.x-c.rayon<0 || c.x+c.rayon>1000)
+        {
+            c.vx=-c.vx;
+        }
+         if(c.y-c.rayon<0 || c.y+c.rayon>1000)
+        {
+            c.vy=-c.vy;
+        }
+
         textscore.setString("score : " + to_string(int(score)));
         shape.setPosition(c.x-c.rayon,c.y-c.rayon);
         shape.setRadius(c.rayon);
-        window.clear();
         window.draw(shape);
         window.draw(textscore);
         window.display();
