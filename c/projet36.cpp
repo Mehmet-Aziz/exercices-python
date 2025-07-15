@@ -30,16 +30,57 @@ Mini-étapes possibles :
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <math.h>
+#include <time.h>
 
 using namespace std;
 using namespace sf;
+
+//etape 2 : affichage d'un cercle
+struct Cercle
+{
+    int rayon;
+    int x;
+    int y;
+    float vx;
+    float vy;
+};
+
+Cercle ajoute_cercle()
+{
+    Cercle c;
+    c.rayon=30 + rand()% 70;
+    c.x=c.rayon + rand()% 800;
+    c.y=c.rayon + rand()% 800;
+    c.vx=0.5;
+    c.vy=0.5;
+    return c;
+}
 
 
 //etape 1 : ouvrire une fenetre
 int main()
 {
+    srand(time(NULL));
     RenderWindow window(VideoMode(1000,1000),"projet36 refaire projet35 pas a pas");
 
+    Cercle c=ajoute_cercle();
+    int score = 0;
+    CircleShape shape(c.rayon);
+    shape.setPosition(c.x-c.rayon,c.y-c.rayon);
+    shape.setFillColor(Color::Blue);
+
+    Font font;
+    if(!font.loadFromFile("DejaVuSans.ttf"))
+    {
+        cerr<<"erreur"<<endl;
+        return 1;
+    }
+
+    Text textscore;
+    textscore.setFont(font);
+    textscore.setFillColor(Color::Red);
+    textscore.setPosition(10,900);
     while(window.isOpen())
     {
         Event event;
@@ -50,9 +91,24 @@ int main()
             {
                 window.close();
             }
-        }
+            if(event.type==Event::MouseButtonPressed && event.mouseButton.button==Mouse::Left)
+            {
+                int sourisX=event.mouseButton.x , sourisY=event.mouseButton.y;
+                float dist=sqrt(pow(sourisX-c.x,2)+pow(sourisY-c.y,2));
+                if(dist<c.rayon)
+                {
+                    score+=1;
+                    c=ajoute_cercle();
+                }
 
+            }
+        }
+        textscore.setString("score : " + to_string(int(score)));
+        shape.setPosition(c.x-c.rayon,c.y-c.rayon);
+        shape.setRadius(c.rayon);
         window.clear();
+        window.draw(shape);
+        window.draw(textscore);
         window.display();
     }
     return 0;
