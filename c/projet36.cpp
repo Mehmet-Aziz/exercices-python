@@ -32,7 +32,7 @@ Mini-étapes possibles :
 #include <SFML/Graphics.hpp>
 #include <math.h>
 #include <time.h>
-
+#include <vector>
 using namespace std;
 using namespace sf;
 
@@ -64,11 +64,13 @@ int main()
     srand(time(NULL));
     RenderWindow window(VideoMode(1000,1000),"projet36 refaire projet35 pas a pas");
 
-    Cercle c=ajoute_cercle();
+    vector <Cercle> c;
+    for(int i=0;i<5;i++)
+    {
+        c.push_back(ajoute_cercle());
+    }
+
     int score = 0;
-    CircleShape shape(c.rayon);
-    shape.setPosition(c.x-c.rayon,c.y-c.rayon);
-    shape.setFillColor(Color::Blue);
 
     Font font;
     if(!font.loadFromFile("DejaVuSans.ttf"))
@@ -94,13 +96,16 @@ int main()
             }
             if(event.type==Event::MouseButtonPressed && event.mouseButton.button==Mouse::Left)
             {
+                for(int i=0;i<c.size();i++)
+                {
                 int sourisX=event.mouseButton.x , sourisY=event.mouseButton.y;
-                float dist=sqrt(pow(sourisX-c.x,2)+pow(sourisY-c.y,2));
-                if(dist<c.rayon)
+                float dist=sqrt(pow(sourisX-c[i].x,2)+pow(sourisY-c[i].y,2));
+                if(dist<c[i].rayon)
                 {
                     //etape 3 : score ++
                     score+=1;
-                    c=ajoute_cercle();
+                    c[i]=ajoute_cercle();
+                }
                 }
 
             }
@@ -108,21 +113,29 @@ int main()
 
         //etape 4 : mouvement et rebond
 
-        c.x+=c.vx;
-        c.y+=c.vy;
-        if(c.x-c.rayon<0 || c.x+c.rayon>1000)
+
+        //etape 5 : vector de cercle
+        for(int i=0;i<c.size();i+=1)
         {
-            c.vx=-c.vx;
+        c[i].x+=c[i].vx;
+        c[i].y+=c[i].vy;
+        if(c[i].x-c[i].rayon<0 || c[i].x+c[i].rayon>1000)
+        {
+            c[i].vx=-c[i].vx;
         }
-         if(c.y-c.rayon<0 || c.y+c.rayon>1000)
+         if(c[i].y-c[i].rayon<0 || c[i].y+c[i].rayon>1000)
         {
-            c.vy=-c.vy;
+            c[i].vy=-c[i].vy;
+        }
+        CircleShape shape(c[i].rayon);
+        shape.setPosition(c[i].x-c[i].rayon,c[i].y-c[i].rayon);
+        shape.setFillColor(Color::Blue);
+        window.draw(shape);
+        shape.setPosition(c[i].x-c[i].rayon,c[i].y-c[i].rayon);
+        shape.setRadius(c[i].rayon);
         }
 
         textscore.setString("score : " + to_string(int(score)));
-        shape.setPosition(c.x-c.rayon,c.y-c.rayon);
-        shape.setRadius(c.rayon);
-        window.draw(shape);
         window.draw(textscore);
         window.display();
     }
