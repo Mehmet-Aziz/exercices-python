@@ -71,6 +71,9 @@ int main()
     }
 
     int score = 0;
+    int highscore = 0;
+    sf::Clock chrono;
+    bool fin=false;
 
     Font font;
     if(!font.loadFromFile("DejaVuSans.ttf"))
@@ -81,8 +84,23 @@ int main()
 
     Text textscore;
     textscore.setFont(font);
+    textscore.setCharacterSize(20);
     textscore.setFillColor(Color::Red);
     textscore.setPosition(10,900);
+
+    Text textchrono;
+    textchrono.setFont(font);
+    textchrono.setCharacterSize(20);
+    textchrono.setFillColor(Color::Red);
+    textchrono.setPosition(900,10);
+
+    Text perdu;
+    perdu.setFont(font);
+    perdu.setCharacterSize(30);
+    perdu.setFillColor(Color::Red);
+    perdu.setPosition(400,400);
+
+
     while(window.isOpen())
     {
         window.clear();
@@ -111,9 +129,43 @@ int main()
             }
         }
 
+        float temps=chrono.getElapsedTime().asSeconds();
+        if(fin==false && temps>30)
+        {
+            fin=true;
+            if(score>highscore)
+            {
+                highscore=score;
+            }
+        }
+
+
+
+        if(fin==true)
+        {
+            window.clear();
+            perdu.setString("GAME OVER \n score :" + to_string(int(score)) + "\n highscore : " + to_string(int(highscore)) );
+
+            if(Keyboard::isKeyPressed(Keyboard::R))
+            {
+                fin=false;
+                chrono.restart();
+                score=0;
+                c.clear();
+                for(int i=0;i<5;i+=1)
+                {
+                    c.push_back(ajoute_cercle());
+                }
+            }
+
+            window.draw(perdu);
+        }
+
+
         //etape 4 : mouvement et rebond
 
-
+        if(fin==false)
+        {
         //etape 5 : vector de cercle
         for(int i=0;i<c.size();i+=1)
         {
@@ -133,8 +185,10 @@ int main()
         window.draw(shape);
         shape.setPosition(c[i].x-c[i].rayon,c[i].y-c[i].rayon);
         shape.setRadius(c[i].rayon);
+        textchrono.setString("temps : " + to_string(int(30-temps)));
         }
-
+        }
+        window.draw(textchrono);
         textscore.setString("score : " + to_string(int(score)));
         window.draw(textscore);
         window.display();
