@@ -30,82 +30,143 @@ Rectangle ajouter_un_rectangle()
 
 int main()
 {
+    srand(time(NULL));
 
-int score=0;
-
-vector <Rectangle> rect;
-for(int i=0;i<5;i+=1)
-{
-rect.push_back(ajouter_un_rectangle());
-}
-
-srand(time(NULL));
-RenderWindow window(VideoMode(1000,1000),"attrape rectangle");
-
-Font font;
-if(!font.loadFromFile("DejaVuSans.ttf"))
-{
-    cerr<<"erreur "<<endl;
-    return 1;
-}
-
-Text affichage;
-affichage.setFont(font);
-affichage.setCharacterSize(20);
-affichage.setFillColor(Color::Red);
-affichage.setPosition(10,900);
-
-while(window.isOpen())
-{
-    window.clear();
-    Event event;
-
-    while(window.pollEvent(event))
-    {
-        if(event.type==Event::Closed)
-        {
-            window.close();
-        }
-        if(event.type==Event::MouseButtonPressed && event.mouseButton.button==Mouse::Left)
-        {
-            for(int i=0;rect.size();i+=1)
-            {
-            float sourisX=event.mouseButton.x;
-            float sourisY=event.mouseButton.y;
-            if(sourisX>=rect[i].x && sourisX<=rect[i].x+rect[i].longeur && sourisY>=rect[i].y && sourisY<=rect[i].y+rect[i].hauteur)
-            {
-                score+=1;
-                rect.push_back(ajouter_un_rectangle());
-            }
-            }
-        
-        }
+    RenderWindow window(VideoMode(1000,1000),"projet 37 de nouveau"); 
     
+    vector <Rectangle> r;
+    for(int i=0;i<5;i+=1)
+    {
+        r.push_back(ajouter_un_rectangle());
+    }
 
-        affichage.setString("score : " + to_string(int(score)));
+    int score=0;
+    int highscore=0;
+    sf::Clock chrono;
+    bool fin=false;
 
-
-        for(int i=0;i<rect.size();i+=1)
-        {
-            rect[i].x+=rect[i].vx;
-            rect[i].y+=rect[i].vy;
-            if(rect[i].x-rect[i].longeur/2<0 || rect[i].x+rect[i].longeur/2>1000 || rect[i].y-rect[i].hauteur/2<0 || rect[i].y+rect[i].hauteur/2>1000)
-            {
-                rect[i].vx=-rect[i].vx;
-                rect[i].vy=-rect[i].vy;
-            }
-            RectangleShape rectangle(Vector2f(rect[i].longeur,rect[i].hauteur));
-            rectangle.setFillColor(Color::Red);
-            rectangle.setPosition(rect[i].x-rect[i].longeur/2,rect[i].y-rect[i].hauteur/2);
-            window.draw(rectangle);
-        }
-
+    Font font;
+    if(!font.loadFromFile("DejaVuSans.ttf"))
+    {
+        cerr<<"erreur"<<endl;
+        return 1;
     }
 
 
-    window.draw(affichage);
-    window.display();
-}
+    Text textscore;
+    textscore.setFont(font);
+    textscore.setCharacterSize(20);
+    textscore.setFillColor(Color::Red);
+    textscore.setPosition(10,900);
 
-return 0;
+    Text textchrono;
+    textchrono.setFont(font);
+    textchrono.setCharacterSize(20);
+    textchrono.setFillColor(Color::Red);
+    textchrono.setPosition(900,10);
+
+    Text perdu;
+    perdu.setFont(font);
+    perdu.setCharacterSize(30);
+    perdu.setFillColor(Color::Red);
+    perdu.setPosition(400,400);
+
+    while(window.isOpen())
+    {
+        window.clear();
+        Event event;
+
+        while(window.pollEvent(event))
+        {
+            if(event.type==Event::Closed)
+            {
+                window.close();
+            }
+
+            if(event.type==Event::MouseButtonPressed && event.mouseButton.button==Mouse::Left)
+            {
+                for(int i=0;i<r.size();i++)
+                {
+                    int sourisX=event.mouseButton.x , sourisY=event.mouseButton.y;
+                    if(sourisX>=r[i].x && sourisX<=r[i].x+r[i].longeur && sourisY >= r[i].y && sourisY<=r[i].y+r[i].hauteur)
+                    {
+
+                        score+=1;
+                        r[i]=ajouter_un_rectangle();
+                    }
+                }
+
+            }
+
+
+        }
+
+
+        float temps=chrono.getElapsedTime().asSeconds();
+        if(fin==false && temps>30)
+        {
+            fin=true;
+            if(score>highscore)
+            {
+                highscore=score;
+            }
+        }
+
+
+
+
+        if(fin==true)
+        {
+            window.clear();
+            perdu.setString("GAME OVER \n score :" + to_string(int(score)) + "\n highscore : " + to_string(int(highscore)) );
+
+            if(Keyboard::isKeyPressed(Keyboard::R))
+            {
+                fin=false;
+                chrono.restart();
+                score=0;
+                r.clear();
+                for(int i=0;i<5;i+=1)
+                {
+                    r.push_back(ajouter_un_rectangle());
+                }
+            }
+
+            window.draw(perdu);
+        }
+
+
+        //etape 4 : mouvement et rebond
+
+        if(fin==false)
+        {
+        //etape 5 : vector de cercle
+        for(int i=0;i<r.size();i+=1)
+        {
+        r[i].x+=r[i].vx;
+        r[i].y+=r[i].vy;
+        if(r[i].x-r[i].longeur/2<0 || r[i].x+r[i].longeur/2>1000)
+        {
+            r[i].vx=-r[i].vx;
+        }
+         if(r[i].y-r[i].hauteur/2<0 || r[i].y+r[i].hauteur/2>1000)
+        {
+            r[i].vy=-r[i].vy;
+        }
+        RectangleShape rec(Vector2f(r[i].longeur,r[i].hauteur));
+        rec.setPosition(r[i].x-r[i].longeur/2,r[i].y-r[i].hauteur/2);
+        rec.setFillColor(Color::Blue);
+        window.draw(rec);
+        rec.setPosition(r[i].x-r[i].longeur/2,r[i].y-r[i].hauteur/2);
+        textchrono.setString("temps : " + to_string(int(30-temps)));
+        }
+        }
+        window.draw(textchrono);
+        textscore.setString("score : " + to_string(int(score)));
+        window.draw(textscore);
+        window.display();
+
+
+    }
+    return 0;
 }
