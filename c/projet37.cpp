@@ -8,6 +8,36 @@ using namespace std;
 using namespace sf;
 
 
+/*
+
+Suite a l'incomprehension du projet37 je le refais pas a pas 
+
+1. Repars d’un mini-objectif (micro-victoire à chaque étape)
+
+N’essaie jamais d’avoir tout d’un coup.
+Avance étape par étape, en testant chaque partie isolément :
+Mini-étapes possibles :
+
+    Ouvre une fenêtre SFML.
+
+    Affiche UN rectangle (fixe, pas de mouvement).
+
+    Gère le clic sur ce cercle → changer la couleur ou ajouter +1 au score.
+
+    Ajoute le mouvement à ce cercle, rebond aux bords.
+
+    Passe à DEUX cercles (un vector de cercles), puis 5.
+
+    Gère le clic sur chacun (boucle sur le vector).
+
+    Quand un cercle est cliqué, le remplacer par un nouveau.
+
+    Ajoute score, chrono, reset.
+
+    Finalise l’affichage du texte, du game over, etc.
+
+*/
+
 struct Rectangle
 {
     float x , y;
@@ -15,35 +45,28 @@ struct Rectangle
     float vx , vy;
 };
 
-Rectangle ajouter_un_rectangle()
+Rectangle ajoute()
 {
-    Rectangle rect;
-    rect.longeur=100;
-    rect.hauteur=100;
-    rect.x=100 + rand()% 800 ;
-    rect.y=100 + rand()% 800 ;
-    rect.vx=0.0075;
-    rect.vy=0.0075;
-    return rect;
+    Rectangle r;
+    r.x=rand()% 1000;
+    r.y=rand()% 1000;
+    r.longeur=100;
+    r.hauteur=100;
+    r.vx=0.0075;
+    r.vy=0.0075;
+    return r;
 }
 
 
 int main()
 {
     srand(time(NULL));
-
-    RenderWindow window(VideoMode(1000,1000),"projet 37 de nouveau"); 
-    
     vector <Rectangle> r;
     for(int i=0;i<5;i+=1)
     {
-        r.push_back(ajouter_un_rectangle());
+        r.push_back(ajoute());
     }
-
-    int score=0;
-    int highscore=0;
-    sf::Clock chrono;
-    bool fin=false;
+    RenderWindow window(VideoMode(1000,1000),"projet37 du debut");
 
     Font font;
     if(!font.loadFromFile("DejaVuSans.ttf"))
@@ -52,24 +75,29 @@ int main()
         return 1;
     }
 
+    Text affichage;
+    affichage.setFont(font);
+    affichage.setCharacterSize(20);
+    affichage.setFillColor(Color::Red);
+    affichage.setPosition(10,900);
 
-    Text textscore;
-    textscore.setFont(font);
-    textscore.setCharacterSize(20);
-    textscore.setFillColor(Color::Red);
-    textscore.setPosition(10,900);
-
-    Text textchrono;
-    textchrono.setFont(font);
-    textchrono.setCharacterSize(20);
-    textchrono.setFillColor(Color::Red);
-    textchrono.setPosition(900,10);
-
+    Text txtscore;
+    txtscore.setFont(font);
+    txtscore.setCharacterSize(20);
+    txtscore.setFillColor(Color::Red);
+    txtscore.setPosition(890 , 10);
+    
     Text perdu;
     perdu.setFont(font);
-    perdu.setCharacterSize(30);
+    perdu.setCharacterSize(20);
     perdu.setFillColor(Color::Red);
-    perdu.setPosition(400,400);
+    perdu.setPosition(435 , 430);
+
+
+    int score=0;
+    int highscore=0;
+    sf::Clock chrono;
+    bool fin=false;
 
     while(window.isOpen())
     {
@@ -82,27 +110,24 @@ int main()
             {
                 window.close();
             }
-
-            if(event.type==Event::MouseButtonPressed && event.mouseButton.button==Mouse::Left)
+            if(event.type==Event::MouseButtonPressed && event.mouseButton.button)
             {
-                for(int i=0;i<r.size();i++)
+                for(int i=0;i<r.size();i+=1)
                 {
-                    int sourisX=event.mouseButton.x , sourisY=event.mouseButton.y;
-                    if(sourisX>=r[i].x && sourisX<=r[i].x+r[i].longeur && sourisY >= r[i].y && sourisY<=r[i].y+r[i].hauteur)
-                    {
-
-                        score+=1;
-                        r[i]=ajouter_un_rectangle();
-                    }
+                float sourisX=event.mouseButton.x;
+                float sourisY=event.mouseButton.y;
+                if(sourisX>=r[i].x - r[i].longeur/2 && sourisX<=r[i].x+r[i].longeur/2 && sourisY>=r[i].y - r[i].hauteur/2 && sourisY<=r[i].y + r[i].hauteur/2)
+                {
+                    score++;
+                    r[i]=ajoute();
                 }
-
+                }
             }
-
 
         }
 
-
         float temps=chrono.getElapsedTime().asSeconds();
+
         if(fin==false && temps>30)
         {
             fin=true;
@@ -113,60 +138,55 @@ int main()
         }
 
 
-
-
-        if(fin==true)
-        {
-            window.clear();
-            perdu.setString("GAME OVER \n score :" + to_string(int(score)) + "\n highscore : " + to_string(int(highscore)) );
-
-            if(Keyboard::isKeyPressed(Keyboard::R))
-            {
-                fin=false;
-                chrono.restart();
-                score=0;
-                r.clear();
-                for(int i=0;i<5;i+=1)
-                {
-                    r.push_back(ajouter_un_rectangle());
-                }
-            }
-
-            window.draw(perdu);
-        }
-
-
-        //etape 4 : mouvement et rebond
-
         if(fin==false)
         {
-        //etape 5 : vector de cercle
         for(int i=0;i<r.size();i+=1)
         {
         r[i].x+=r[i].vx;
         r[i].y+=r[i].vy;
-        if(r[i].x-r[i].longeur/2<0 || r[i].x+r[i].longeur/2>1000)
+
+        if(r[i].x - r[i].longeur/2<0 || r[i].x + r[i].longeur/2>1000 ||r[i].y - r[i].hauteur/2<0 || r[i].y + r[i].hauteur/2>1000)
         {
             r[i].vx=-r[i].vx;
-        }
-         if(r[i].y-r[i].hauteur/2<0 || r[i].y+r[i].hauteur/2>1000)
-        {
             r[i].vy=-r[i].vy;
+
         }
-        RectangleShape rec(Vector2f(r[i].longeur,r[i].hauteur));
-        rec.setPosition(r[i].x-r[i].longeur/2,r[i].y-r[i].hauteur/2);
-        rec.setFillColor(Color::Blue);
-        window.draw(rec);
-        rec.setPosition(r[i].x-r[i].longeur/2,r[i].y-r[i].hauteur/2);
-        textchrono.setString("temps : " + to_string(int(30-temps)));
+
+        RectangleShape shape(Vector2f(100,100));
+        shape.setFillColor(Color::Red);
+        shape.setPosition(r[i].x - r[i].longeur/2,r[i].y - r[i].hauteur/2);
+        window.draw(shape);
+        } 
+
+        affichage.setString("score : " + to_string(int(score)));
+        txtscore.setString("temps : " + to_string(int(30-temps)) );
         }
+
+
+         if(fin==true)
+        {
+            window.clear();
+            perdu.setString("GAME OVER \n score : " + to_string(int(score)) + "\n highscore : " + to_string(int(highscore)));
+            window.draw(perdu);
+
+            if(Keyboard::isKeyPressed(Keyboard::R))
+            {
+                chrono.restart();
+                fin=false;
+                r.clear();
+                score=0;
+                for(int i=0;i<5;i++)
+                {
+                    r.push_back(ajoute());
+                }
+            }
+
         }
-        window.draw(textchrono);
-        textscore.setString("score : " + to_string(int(score)));
-        window.draw(textscore);
+
+        window.draw(txtscore);
+        window.draw(affichage);
         window.display();
-
-
     }
+    
     return 0;
 }
