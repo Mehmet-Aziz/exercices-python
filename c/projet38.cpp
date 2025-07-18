@@ -7,78 +7,97 @@
 using namespace std;
 using namespace sf;
 
-/*
 
-Pseudocode étape 1 — Démarrage du jeu Snake
+enum Ecran { MENU , JEU };
 
-1. Ouvre une fenêtre SFML 600x600 (ou 800x800)
-2. Crée une variable “serpent” : une liste (vector) de positions (x, y)
-   - Au début, un seul carré au centre
-3. À chaque frame : 
-   - Déplace le serpent dans la direction actuelle (au début : droite)
-   - Affiche chaque case du serpent avec un RectangleShape
-4. Gère la fermeture de la fenêtre
-
-*/
-
-struct Serpent
+bool sourisSur(const Vector2i& souris , const RectangleShape& bouton)
 {
-    float x ;
-    float y;
-};
-
-Serpent ajoute()
-{
-    Serpent s;
-    s.x=500;
-    s.y=500;
-    return s;
+    FloatRect bounds = bouton.getGlobalBounds();
+    return bounds.contains(static_cast<float>(souris.x), static_cast<float>(souris.y));
 }
-
 
 int main()
 {
+    RenderWindow window(VideoMode(1000,1000),"MENU");
 
-    RenderWindow window(VideoMode(1000,1000),"SNAKE");
+    Font font;
+    if(!font.loadFromFile("DejaVuSans.ttf"))
+    {
+        cerr<<"error"<<endl;
+        return 1;
+    }
 
-    Serpent s;
-    s=ajoute();
+
+    RectangleShape boutonJouer(Vector2f(200,50));
+    boutonJouer.setPosition(200,150);
+    boutonJouer.setFillColor(Color(100,200,100));
+    Text txtJouer("Jouer", font ,24);
+    txtJouer.setPosition(260,160);
+
+    RectangleShape boutonQuitter(Vector2f(200,50));
+    boutonQuitter.setPosition(200,230);
+    boutonQuitter.setFillColor(Color(200,100,100));
+    Text txtQuitter("Quitter" , font , 24);
+    txtQuitter.setPosition(245,240);
+
+    Text titre("Menu", font , 36);
+    titre.setPosition(140,50);
+    titre.setFillColor(Color::Blue);
+
+    Text txtJeu("Jeu en cours \n presse echap pour revenir au menu", font , 24);
+    txtJeu.setPosition(80,180);
+
+    Ecran ecranactuel = MENU;
 
     while(window.isOpen())
     {
-        window.clear();
         Event event;
-
         while(window.pollEvent(event))
         {
             if(event.type==Event::Closed)
             {
                 window.close();
             }
-            if (event.type==Event::KeyPressed && event.key.code==Keyboard::Right) 
+
+            if(ecranactuel== MENU)
             {
-                s.x+=1;
+                if(event.type==Event::MouseButtonPressed && event.mouseButton.button==Mouse::Left)
+                {
+                    Vector2i souris = Mouse::getPosition(window);
+                    if(sourisSur(souris,boutonJouer))
+                    {
+                        ecranactuel=JEU;
+                    }
+                    if(sourisSur(souris,boutonQuitter))
+                    {
+                        window.close();
+                    }
+                }
             }
-            if (event.type==Event::KeyPressed && event.key.code==Keyboard::Left) 
+            else if(ecranactuel==JEU)
             {
-                s.x-=1;
+                if(event.type==Event::KeyPressed && event.key.code==Keyboard::Escape)
+                {
+                    ecranactuel=MENU;
+                }
             }
-            if (event.type==Event::KeyPressed && event.key.code==Keyboard::Down) 
-            {
-                s.y+=1;
-            }
-            if (event.type==Event::KeyPressed && event.key.code==Keyboard::Up) 
-            {
-                s.y-=1;
-            }
-            
         }
 
-        RectangleShape shape(Vector2f(20,20));
-        shape.setPosition(s.x-5,s.y-5);
-        shape.setFillColor(Color::Green);
+        window.clear(Color::White);
 
-        window.draw(shape);
+        if(ecranactuel==MENU)
+        {
+            window.draw(titre);
+            window.draw(boutonJouer);
+            window.draw(txtJouer);
+            window.draw(boutonQuitter);
+            window.draw(txtQuitter);
+        }
+        else if(ecranactuel==JEU)
+        {
+            window.draw(txtJeu);
+        }
+
         window.display();
     }
 
