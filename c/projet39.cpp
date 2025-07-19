@@ -100,14 +100,14 @@ int main()
     boutonJouer.setFillColor(Color(100,100,100));
     boutonJouer.setPosition(jouerX,jouerY);
     Text txtJouer("JOUER " , font , 20);
-    txtJouer.setPosition(jouerX-jouerl/2,jouerY-jouerh/2);
+    txtJouer.setPosition(jouerX+10,jouerY+10);
 
     float quitterX=500 , quitterY=700 , quitterl=100 , quitterh=100;
     RectangleShape boutonQuitter(Vector2f(quitterl,quitterh));
     boutonQuitter.setFillColor(Color(200,200,200));
     boutonQuitter.setPosition(quitterX-quitterl/2,quitterY-quitterh/2);
     Text txtQuitter("Quitter " , font , 20);
-    txtQuitter.setPosition(480,680);
+    txtQuitter.setPosition(quitterX+10,quitterY+10);
 
 
     while(window.isOpen())
