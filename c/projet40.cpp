@@ -68,8 +68,24 @@ int main()
     Text txtJouer("JOUER" , font , 20);
     txtJouer.setPosition(DIMW/2 -35 , DIMW/2 +200 -20);
 
+    Text txtscore;
+    txtscore.setFont(font);
+    txtscore.setFillColor(Color::Red);
+    txtscore.setPosition(10,900);
+    
+    Text txttemps;
+    txttemps.setFont(font);
+    txttemps.setFillColor(Color::Red);
+    txttemps.setPosition(850 , 10);
+
+    Text txtperdu;
+    txtperdu.setFont(font);
+    txtperdu.setFillColor(Color::Red);
+    txtperdu.setPosition(400,400);
 
     int score =0 , highscore=0;
+    bool fin=false;
+    sf::Clock chrono;
 
     while(window.isOpen())
     {
@@ -114,6 +130,7 @@ int main()
                 {
                     score+=1;
                     c[i]=ajoute_cercle();
+                    break;
                 }
                 }
             }
@@ -135,6 +152,22 @@ int main()
         if(etat==true)
         {
             window.clear();
+
+            float temps=chrono.getElapsedTime().asSeconds();
+
+            if(fin==false && temps>30)
+            {
+                if(score>=highscore)
+                {
+                    highscore=score;
+                }
+                fin=true;
+            }
+
+
+
+            if(fin==false)
+            {
             for(int i=0;i<c.size();i+=1)
             {
                 CircleShape shape(c[i].r);
@@ -148,10 +181,36 @@ int main()
                     c[i].vy=-c[i].vy;
                 }
 
+
+
+                txtscore.setString("score :" + to_string(int(score)));
+                txttemps.setString("temps " + to_string(int(30-temps)));
+                window.draw(txttemps);
                 window.draw(shape);
+                window.draw(txtscore);
 
 
             }
+            }
+
+            if(fin==true)
+            {
+                txtperdu.setString("GAME OVER \n score : " + to_string(int(score)) + " highscore : " + to_string(int(highscore)) );
+                window.draw(txtperdu);
+
+                if(Keyboard::isKeyPressed(Keyboard::R))
+                {
+                    chrono.restart();
+                    fin=false;
+                    c.clear();
+                    score=0;
+                    for(int i=0;i<5;i+=1)
+                    {
+                        c.push_back(ajoute_cercle());
+                    }
+                }
+            }
+
         }
 
 
