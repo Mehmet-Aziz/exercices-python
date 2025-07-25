@@ -22,7 +22,7 @@ void ajoute_rectangle(vector <Rectangle> &r)
     float a=1+rand()% 100;
     re.vx=a/10000 * (rand()%2 ==0 ? 1 :-1);
     float b=1+rand()% 100;
-    re.vy=b/10000 * (rand()%2 ==0 ? 1 :-1);
+    re.vy=b/10000;
     r.push_back(re);
 }
 
@@ -124,6 +124,10 @@ int main()
             if(r[i].y - r[i].h/2<0 || r[i].y + r[i].h/2>1000)
             {
                 r[i].vy=-r[i].vy;
+            }
+            if(r[i].x<joueurX+joueurL && r[i].x + r[i].l>joueurX && r[i].y<joueurY+joueurH && r[i].y + r[i].h>joueurY)
+            {
+                fin=true;
             }
 
             rect.setPosition(r[i].x-r[i].l/2,r[i].y-r[i].h/2);
