@@ -20,7 +20,7 @@ int main() {
     return 0;
 }
 
-*/
+
 
 void incremete(int *p)
 {
@@ -51,10 +51,39 @@ int main()
  incremete(&x);
  cout<<endl<<*ptrx;
 
-swap(&x , &y);
+swap(&x , &y)
 
 cout<<endl<<endl<<*ptrx<<*ptry<<endl;
 
 
  return 0;
 }
+
+*/
+
+/*
+int main()
+{
+    int tab[5]={1,2,3,4,5};
+    int *p=tab;
+    for(int i=0;i<5;i++)
+    {
+        cout<<*(p+i)<<" " ;
+
+    }
+    return 0;
+}
+    */
+
+int main()
+{
+    int *tab=new int[10];
+    for(int i=0;i<10;i++)
+    {
+        cin>>tab[i];
+        cout<<tab[i]<<" ";
+    }
+
+    delete[] tab;
+    return 0;
+}    
