@@ -63,13 +63,25 @@ int main()
     init_Oiseau(o);
     vector<Tuyeau1> t1;
     vector<Tuyeau2> t2;
+
+
+    bool menu=0; //0 = on est sur le menu , 1 = sur le jeu 
+
+    Font font;
+    if(!font.loadFromFile("DejaVuSans.ttf"))
+    {
+        cout<<"erreur"<<endl;
+        return 1;
+    }
+
+
     
     for(int i=0;i<9;i+=1)
     {
     Tuyeau1 t11;
     Tuyeau2 t22;
     init_Tuyeau1(t11);
-    t11.x = 500 + i * 150;
+    t11.x = 500 + i * 250;
     init_Tuyeau2(t22,t11);
     t1.push_back(t11);
     t2.push_back(t22);
@@ -77,11 +89,25 @@ int main()
 
     RenderWindow window(VideoMode(1000,1000),"flappy");
 
+
+
+
+
+
     CircleShape flappy(o.r);
     flappy.setFillColor(Color::Red);
 
 
-   
+            float bjouerx=500 , bjouery=300 , bjouerl=100 , bjouerh=100;
+            RectangleShape bjouer(Vector2f(bjouerl,bjouerh));
+            bjouer.setFillColor(Color::Red);
+            
+
+            float bquitterx=500 , bquittery=600 , bquitterl=100 , bquitterh=100;
+            RectangleShape bquitter(Vector2f(bquitterl,bquitterh));
+            bquitter.setFillColor(Color::Red);
+
+
 
 
     while(window.isOpen())
@@ -97,9 +123,24 @@ int main()
             }
 
 
+            if(menu==0 && event.type==Event::MouseButtonPressed && event.mouseButton.button==Mouse::Left)
+            {
+                float sourisX=event.mouseButton.x;
+                float sourisY=event.mouseButton.y;
+                if(sourisX>=bjouerx-bjouerl/2 && sourisX<=bjouerx+bjouerl && sourisY>=bjouery-bjouerh/2 && sourisY<=bjouery+bjouerh)
+                {
+                    menu=1;
+                }
+                if(sourisX>=bquitterx-bquitterl/2 && sourisX<=bquitterx+bquitterl && sourisY>=bquittery-bquitterh/2 && sourisY<=bquittery+bquitterh)
+                {
+                    window.close();
+                }
+            }
 
 
-            if (event.type == Event::KeyPressed && event.key.code == Keyboard::Up) 
+
+
+            if (menu == 1 && event.type == Event::KeyPressed && event.key.code == Keyboard::Up) 
             {
                 o.vy = -0.0075;
             }
@@ -108,9 +149,40 @@ int main()
         }
 
 
+        if(menu==0)
+        {
+
+            bquitter.setPosition(bquitterx-bquitterl/2,bquittery-bquitterh/2);
+            bjouer.setPosition(bjouerx-bjouerl/2,bjouery-bjouerh/2);
+            window.draw(bquitter);
+            window.draw(bjouer);
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
        
 
+
+
+        if(menu==1)
+        {
         o.vy+=0.0000005;
         o.y+=o.vy;
        
@@ -133,11 +205,25 @@ int main()
         RectangleShape tuyeau2(Vector2f(t2[i].l,t2[i].h));
         tuyeau2.setFillColor(Color::Green);
 
-            if(t1[i].x<0 && t2[i].x<0)
-            {
-                init_Tuyeau1(t1[i]);
-                init_Tuyeau2(t2[i],t1[i]);
-            }
+           if(t1[i].x +t1[i].l<0)
+           {
+                float max_x=0;
+                for(int j=0;j<t1.size();j+=1)
+                {
+                    if(t1[j].x>max_x)
+                    {
+                        max_x=t1[j].x;
+                    }
+
+                    t1[i].x=max_x+150;
+
+                    t1[i].h=10+rand()% 600;
+
+                    t2[i].x=t1[i].x;
+                    t2[i].y=200+t1[i].h;
+                    t2[i].h=1000-t2[i].y;
+                }
+           }
 
         tuyeau1.setPosition(t1[i].x,t1[i].y);
         window.draw(tuyeau1);
@@ -146,6 +232,13 @@ int main()
         }
         flappy.setPosition(o.x-o.r,o.y-o.r);
         window.draw(flappy);
+        }
+
+
+
+
+
+
 
         window.display();
         
