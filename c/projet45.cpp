@@ -35,6 +35,12 @@ struct Tuyeau2
     float x , y , l , h , vx;
 };
 
+struct Piece
+{
+    float x , y , r , vx;
+};
+
+
 
 void init_Tuyeau1 (Tuyeau1 &t)
 {
@@ -55,6 +61,14 @@ void init_Tuyeau2(Tuyeau2 &t2 , Tuyeau1 t1)
 
 }
 
+void init_Piece(Piece &p)
+{
+    p.r=10;
+    p.x=500;
+    p.y=rand()% 1000;
+    p.vx=-0.005;
+}
+
 int main()
 {
     srand(time(NULL));
@@ -63,9 +77,13 @@ int main()
     init_Oiseau(o);
     vector<Tuyeau1> t1;
     vector<Tuyeau2> t2;
-
+    vector<Piece> p;
 
     bool menu=0; //0 = on est sur le menu , 1 = sur le jeu 
+    bool jeu=1; // 1 = en jeu sinon ° = perdu
+    int score=0;
+    int higsore=0;
+
 
     Font font;
     if(!font.loadFromFile("DejaVuSans.ttf"))
@@ -80,11 +98,15 @@ int main()
     {
     Tuyeau1 t11;
     Tuyeau2 t22;
+    Piece pp;
     init_Tuyeau1(t11);
     t11.x = 500 + i * 250;
     init_Tuyeau2(t22,t11);
     t1.push_back(t11);
     t2.push_back(t22);
+    init_Piece(pp);
+    pp.x=500+i*250;
+    p.push_back(pp);
     }
 
     RenderWindow window(VideoMode(1000,1000),"flappy");
@@ -137,7 +159,7 @@ int main()
                 }
             }
 
-
+            
 
 
             if (menu == 1 && event.type == Event::KeyPressed && event.key.code == Keyboard::Up) 
@@ -183,27 +205,42 @@ int main()
 
         if(menu==1)
         {
+            if(jeu==0)
+            {
+                window.clear();
+
+            }
+
+
+        if(jeu==1)
+        {    
         o.vy+=0.0000005;
         o.y+=o.vy;
        
         if(o.y +o.r<=0)
         {
-            o.y=500;
+            jeu=0;
 
         }
-         if(o.y +o.r>=1000)
+         if(o.y -o.r>=1000)
         {
-            o.y=1000;
+            jeu=0;
         }
 
         for(int i=0;i<t1.size();i+=1)
         {
         t1[i].x+=t1[i].vx;
         t2[i].x+=t2[i].vx;
+        p[i].x+=p[i].vx;
         RectangleShape tuyeau1(Vector2f(t1[i].l,t1[i].h));
         tuyeau1.setFillColor(Color::Green);
         RectangleShape tuyeau2(Vector2f(t2[i].l,t2[i].h));
         tuyeau2.setFillColor(Color::Green);
+        CircleShape piece(p[i].r);
+        piece.setFillColor(Color::Yellow);
+
+
+
 
            if(t1[i].x +t1[i].l<0)
            {
@@ -225,6 +262,86 @@ int main()
                 }
            }
 
+
+        
+
+        float gauche_oiseau   = o.x;
+        float droite_oiseau   = o.x + 2 * o.r;
+        float haut_oiseau     = o.y;
+        float bas_oiseau      = o.y + 2 * o.r;
+
+        float gauche_tuyau    = t1[i].x;
+        float droite_tuyau    = t1[i].x + t1[i].l;
+        float haut_tuyau      = t1[i].y;
+        float bas_tuyau       = t1[i].y + t1[i].h;
+        float gauche_tuyau2    = t2[i].x;
+        float droite_tuyau2    = t2[i].x + t2[i].l;
+        float haut_tuyau2      = t2[i].y;
+        float bas_tuyau2       = t2[i].y + t2[i].h;
+
+        if (!(droite_oiseau < gauche_tuyau ||
+        gauche_oiseau > droite_tuyau ||
+        bas_oiseau    < haut_tuyau ||
+        haut_oiseau   > bas_tuyau))
+        {
+        jeu = 0; // Collision !
+        }
+        if (!(droite_oiseau < gauche_tuyau2 ||
+        gauche_oiseau > droite_tuyau2 ||
+        bas_oiseau    < haut_tuyau2 ||
+        haut_oiseau   > bas_tuyau2))
+        {
+        jeu = 0; // Collision !
+        }
+
+        float dx=o.x-p[i].x;
+        float dy=o.y-p[i].y;
+        float dist2=dx*dx+dy*dy;
+        float somme_des_r=o.r+p[i].r;
+        if(dist2<somme_des_r*somme_des_r)
+        {
+            score+=1;
+            float max_xx=0;
+                for(int j=0;j<p.size();j+=1)
+                {
+                    if(p[j].x>max_xx)
+                    {
+                        max_xx=p[j].x;
+                    }
+
+                    p[i].x=max_xx+150;
+
+                    
+
+                    p[i].x=p[i].x;
+                    p[i].y=200;
+                    
+                }
+
+                if(p[i].x -p[i].r<0)
+           {
+                float max_x=0;
+                for(int j=0;j<p.size();j+=1)
+                {
+                    if(p[j].x>max_x)
+                    {
+                        max_x=p[j].x;
+                    }
+
+                    p[i].x=max_x+150;
+
+                    
+
+                    p[i].x=p[i].x;
+                    p[i].y=200;
+                    
+                }
+           }
+        }
+
+
+        piece.setPosition(p[i].x-p[i].r,p[i].y-p[i].r);
+        window.draw(piece);
         tuyeau1.setPosition(t1[i].x,t1[i].y);
         window.draw(tuyeau1);
         tuyeau2.setPosition(t2[i].x,t2[i].y);
@@ -233,7 +350,7 @@ int main()
         flappy.setPosition(o.x-o.r,o.y-o.r);
         window.draw(flappy);
         }
-
+        }
 
 
 
