@@ -92,7 +92,7 @@ void affiche_while_pair()
     int i=0;
     while(i<=20)
     {
-        cout<<i<<"";
+        cout<<i<<" ";
         i+=2;
     }
 }
@@ -101,6 +101,7 @@ void for_cinq()
 {
     string mot;
     cout<<endl<<"quelle est le mot que tu veux afficher 5 fois ?"<<endl;
+    cin>>mot;
     for(int i=0;i<5;i+=1)
     {
         cout<<mot<<endl;
@@ -190,7 +191,7 @@ void multiple_de_trois()
 {
     for(int i=0;i<=50;i++)
     {
-        if(i%3==1)
+        if(i%3==0)
         {
             cout<<i<<" est multiple de 3  ";
         }
@@ -268,7 +269,7 @@ void fibonacci()
     float tamp;
     for(int i=0;i<10;i+=1)
     {
-        cout<<u0<<u1<<u2;
+        cout<<"au rang"<<i<<" "<<u0<<" "<<u1<<" "<<u2;
         tamp=u2;
         u2=u1+u0;
         u0=u1;
