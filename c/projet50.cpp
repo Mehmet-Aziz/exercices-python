@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 using namespace std;
 
 
@@ -104,12 +105,178 @@ void affiche_un_a_dix()
     cout<<endl;
 }
 
+
+void moyennes()
+{
+float a , b , c;
+cout<<"on va faire la moyenne de 3 nombres donne le nombre 1 :"<<endl;
+cin>>a;
+cout<<"maintenant le nombre 2 :"<<endl;
+cin>>b;
+cout<<"et pour finir le nombre 3 :"<<endl;
+cin>>c;
+cout<<"la moyenne est : "<<(a+b+c)/3<<endl;
+}
+
+void multiplication()
+{
+    float nb;
+    cout<<"quelle table veux tu afficher ?"<<endl;
+    cin>>nb;
+    for(int i=0;i<11;i++)
+    {
+        cout<<nb<<" * "<<i<<" = "<<nb*i<<endl;
+    }
+    cout<<endl;
+}
+
+void countdown()
+{
+    for(int i=10;i>=0;i--)
+    {
+        cout<<i<<" ";
+    }
+    cout<<endl;
+}
+
+void factorielle()
+{
+    int n;
+    int somme=1;
+    cout<<"tu veux la factorielle de combien ?"<<endl;
+    cin>>n;
+    if(n==0)
+    {
+        cout<<"factorielle de 0 c'est 1"<<endl;
+    }
+    if(n>0)
+    {
+        for(int i=1;i<=n;i++)
+        {
+            somme*=i;
+        }
+        cout<<"factorielle de "<<n<<" est "<<somme<<endl;
+    }
+}
+
+void divisible_par_trois_et_cinq()
+{
+    int nb;
+    cout<<"verifions si ton nombre est divisible par 3 et par 5 "<<endl;
+    cin>>nb;
+    if(nb%3==0 && nb%5==0)
+    {
+        cout<<"bravo , c'est divisible par 3 et 5"<<endl;
+    }
+    else
+    {
+        cout<<"ça ne l'est pas"<<endl;
+    }
+}
+
+void le_plus_grand()
+{
+    float a , b ,c;
+    cout<<"saisis 3 nombres et je te dis lequel et le plus grand , nombre 1 ?"<<endl;
+    cin>>a;
+    cout<<"nombre 2?"<<endl;
+    cin>>b;
+    cout<<"nombre 3?"<<endl;
+    cin>>c;
+    if((a>b)&&(a>c))
+    {
+        if(b>c)
+        {
+            cout<<"Le plus grand est "<<a<<" suivi de "<<b<<" ainsi que "<<c<<endl;
+        }
+        else
+        {
+            cout<<"Le plus grand est "<<a<<" suivi de "<<c<<" ainsi que "<<b<<endl;
+        }
+    }
+    if((b>a)&&(b>c))
+    {
+        if(a>c)
+        {
+            cout<<"Le plus grand est "<<b<<" suivi de "<<a<<" ainsi que "<<c<<endl;
+        }
+        else
+        {
+            cout<<"Le plus grand est "<<b<<" suivi de "<<c<<" ainsi que "<<a<<endl;
+        }
+    }
+    if((c>b)&&(c>a))
+    {
+        if(a>b)
+        {
+            cout<<"Le plus grand est "<<c<<" suivi de "<<a<<" ainsi que "<<b<<endl;
+        }
+        else
+        {
+            cout<<"Le plus grand est "<<c<<" suivi de "<<b<<" ainsi que "<<a<<endl;
+        }
+    }
+}
+
+void affiche_cinq_fois()
+{
+    string mot;
+    cout<<"quelle mot veux tu afficher 5 fois ?"<<endl;
+    cin>>mot;
+    for(int i=0;i<5;i+=1)
+    {
+        cout<<mot<<" ";
+    }
+    cout<<endl;
+}
+
+void espace()
+{
+    string mot;
+    cout<<"quelle est ton mot ?"<<endl;
+    cin>>mot;
+    for(int i=0;mot.length();i+=1)
+    {
+        cout<<mot[i]<<" ";
+    }
+    cout<<endl;
+}
+
+void longueur_mot()
+{
+    string mot;
+    cout<<"quelle est ton mot ?"<<endl;
+    cin>>mot;
+    int somme=0;
+    for(int i=0;i<mot.length();i+=1)
+    {
+        somme+=1;
+    }
+    cout<<"voici la longueur du mot "<<somme<<"ou bien avec la fonction : "<<mot.length()<<endl;
+}
+
+
+void devine()
+{
+    int a=rand()%(10-1+1)+1;
+    cout<<"quelle est le nombre ?"<<endl;
+    int choix;
+    do
+    {
+    cin>>choix;
+    } while (choix==a);
+    cout<<"Bravo , tu as trouvé"<<endl;
+}
+
+
 void menu()
 {
     int choix;
     bool fin=false;
     cout<<"bienvenu sur le menu , tu as la possibilite de faire plusieurs chose . Tape le nombre pour y avoir acces"<<endl;
     cout<<"0.quitter, 1.Bonjour, 2.prenom_age, 3.affiche_nombre, 4.somme, 5.aire_rectangle, 6.km_to_miles, 7.perimetre_cercle, 8.positif_negatif, 9.pair_impair, 10.1a10,"<<endl;
+    cout<<"11.moyenne, 12.multiplication, 13.countdown, 14.factorielle, 15.divisible 3 et 5, 16.le plus grand, 17.affiche5fois, 18.espace, 19.longeurmot, 20.devine "<<endl;
+
     cout<<"31. TOUT"<<endl;
     do
     {
@@ -127,7 +294,16 @@ void menu()
         case 8:positif_negatif();break;
         case 9:pair_impair();break;
         case 10: affiche_un_a_dix();break;
-
+        case 11: moyennes();break;
+        case 12: multiplication();break;
+        case 14:factorielle();break;
+        case 13 :countdown();break;
+        case 15: divisible_par_trois_et_cinq();break;
+        case 16 : le_plus_grand();break;
+        case 17:affiche_cinq_fois();break;
+        case 18: espace();break;
+        case 19:longueur_mot();break;
+        case 20: devine();break;
 
         case 31:
         afficher_bonjour();
@@ -139,7 +315,17 @@ void menu()
         perimetre_cercle();
         positif_negatif();
         pair_impair();
-        affiche_un_a_dix();break;
+        affiche_un_a_dix();
+        moyennes();
+        multiplication();
+        factorielle();
+        countdown();
+        divisible_par_trois_et_cinq();
+        le_plus_grand();
+        affiche_cinq_fois();
+        espace();
+        longueur_mot();
+        devine();
 
         default : cout<<"erreur"<<endl;fin=true;break;
     }
@@ -149,6 +335,7 @@ void menu()
 
 int main()
 {
+    srand(time(NULL));
     menu();
     return 0;
 }
