@@ -235,7 +235,7 @@ void espace()
     string mot;
     cout<<"quelle est ton mot ?"<<endl;
     cin>>mot;
-    for(int i=0;mot.length();i+=1)
+    for(int i=0;i<mot.length();i+=1)
     {
         cout<<mot[i]<<" ";
     }
@@ -264,10 +264,163 @@ void devine()
     do
     {
     cin>>choix;
-    } while (choix==a);
+    } while (choix!=a);
     cout<<"Bravo , tu as trouvé"<<endl;
 }
 
+void calculatrice()
+{
+    float a , b;
+    char choix;
+    bool fin=false;
+    do
+    {
+        cout<<"pour quitter , choisis dans l'opperande '1'"<<endl;
+        cout<<"choisis ta valeur"<<endl;
+        cin>>a;
+        cout<<"choisis l'opperande"<<endl;
+        cin>>choix;
+        cout<<"choisis ta deuxieme valeur"<<endl;
+        cin>>b;
+        switch (choix)
+        {
+            case '1' : fin=true; break;
+            case '+' : cout<<a+b<<endl;break;
+            case '*' : cout<<a*b<<endl;break;
+            case '-' : cout<<a-b<<endl;break;
+            case '/' :
+            if(b!=0)
+            {
+                cout<<a/b<<endl;
+            }
+            else
+            {
+                cout<<"error"<<endl;
+            }
+        }
+
+    }
+    while(fin==false);
+}
+
+void imc()
+{
+    float poids , taille;
+    cout<<"quelle est le poids ?"<<endl;
+    cin>>poids;
+    cout<<"quelle est la taille ?"<<endl;
+    cin>>taille;
+    cout<<"l'imc est "<<poids/(taille*taille)<<endl;
+}
+
+void multiple_de_sept()
+{
+    for(int i=7;i<=100;i+=1)
+    {
+        if(i%7==0)
+        {
+            cout<<i<<" est un multiple de 7"<<endl;
+        }
+    }
+    cout<<endl;
+}
+
+void palindrome()
+{
+string mot , tom;
+cout<<"quelle est ton mot ?"<<endl;
+cin>>mot;
+tom.resize(mot.length());
+for(int i=0;i<mot.length();i+=1)
+{
+    tom[i]=mot[mot.length()-1-i];
+}
+if(mot==tom)
+{
+    cout<<mot<<" est un palindrome"<<endl;
+}
+else
+{
+    cout<<"ce n'est pas un palindrome"<<endl;
+}
+}
+
+void plus_ou_moins()
+{
+    int essai=0;
+    bool fin=false;
+    int a=rand()% 100 +1;
+    int nb;
+    do
+    {
+    cin>>nb;
+    essai+=1;
+    if(nb==a)
+    {
+        fin=true;
+    }
+    if(nb<a)
+    {
+        cout<<"trop petit"<<endl;
+    }
+    else if (nb>a)
+    {
+        cout<<"trop grand"<<endl;
+    }
+    
+    } while (fin==false && essai<10);
+    if(essai<10)
+    {
+        cout<<"bravo , tu as reussi en moins de 10 essais"<<endl;
+    }
+    
+}
+
+void somme_des_n()
+{
+    float somme=0;
+    float n;
+    cout<<"tu veux jusqua quelle nombre ta somme ?"<<endl;
+    cin>>n;
+    for(int i=0;i<=n;i+=1)
+    {
+        somme+=i;
+    }
+    cout<<"voici la somme : "<<somme<<endl;
+}
+
+void fibonacci()
+{
+    int u0=1;
+    int u1=1;
+    int un;
+    int n;
+    cout<<"tu veux quelle terme de la suite de fibonacci ?"<<endl;
+    cin>>n;
+    if(n==0 || n==1)
+    {
+        cout<<"le terme demandé donne 1"<<endl;
+    }
+
+    for(int i=2;i<n;i+=1)
+    {
+        un=u0+u1;
+        u0=u1;
+        u1=un;
+    }
+    cout<<"le terme demandé donne "<<un<<endl;
+}
+
+void boucler()
+{
+    string mot;
+    do
+    {
+        cout<<"tu dois ecrire    stop     pour que cela s'arrete "<<endl;
+        cin>>mot;
+    } while (mot!="stop");
+    
+}
 
 void menu()
 {
@@ -276,8 +429,8 @@ void menu()
     cout<<"bienvenu sur le menu , tu as la possibilite de faire plusieurs chose . Tape le nombre pour y avoir acces"<<endl;
     cout<<"0.quitter, 1.Bonjour, 2.prenom_age, 3.affiche_nombre, 4.somme, 5.aire_rectangle, 6.km_to_miles, 7.perimetre_cercle, 8.positif_negatif, 9.pair_impair, 10.1a10,"<<endl;
     cout<<"11.moyenne, 12.multiplication, 13.countdown, 14.factorielle, 15.divisible 3 et 5, 16.le plus grand, 17.affiche5fois, 18.espace, 19.longeurmot, 20.devine "<<endl;
-
-    cout<<"31. TOUT"<<endl;
+    cout<<"21.calculatrice, 22.IMC, 23.multiple de 7, 24.palindrome, 25.plus ou moins, 26.somme des n, 27. fibonacci, 28. boucler "<<endl;
+    cout<<"29. TOUT"<<endl;
     do
     {
     cin>>choix;
@@ -304,8 +457,16 @@ void menu()
         case 18: espace();break;
         case 19:longueur_mot();break;
         case 20: devine();break;
-
-        case 31:
+        case 21: calculatrice();break;
+        case 22 :imc();break;
+        case 23:multiple_de_sept();break;
+        case 24: palindrome();break;
+        case 25: plus_ou_moins();break;
+        case 26:somme_des_n();break;
+        case 27:fibonacci();break;
+        case 28:boucler();break;
+ 
+        case 29:
         afficher_bonjour();
         prenom_et_age();
         affiche_nombre();
@@ -326,6 +487,14 @@ void menu()
         espace();
         longueur_mot();
         devine();
+        calculatrice();
+        imc();
+        multiple_de_sept();
+        palindrome();
+        plus_ou_moins();
+        somme_des_n();
+        fibonacci();
+        boucler();
 
         default : cout<<"erreur"<<endl;fin=true;break;
     }
